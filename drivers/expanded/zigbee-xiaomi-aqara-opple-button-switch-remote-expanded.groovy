@@ -1,7 +1,9 @@
 /**
  *  Copyright 2020 Markus Liljergren (https://oh-lalabs.com)
  *
- *  Version: v1.0.1.1123
+ *  Version: 
+ *    v1.0.1.1123 2020-11-23 (Markus Li) - last version by Markus
+ *    v1.0.2.0829 2022-08-29 (kkossev) - (development branch temporary version 10:45 AM) : added lumi.remote.b28ac1 (WRS-R02)
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,10 +25,15 @@
 // BEGIN:getDefaultImports()
 import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
+import groovy.transform.Field
  
 import java.security.MessageDigest
 // END:  getDefaultImports()
 import hubitat.helper.HexUtils
+
+@Field static final Boolean debug = false
+@Field static final Boolean deviceSimulation = false
+@Field static final String simulatedModel = "lumi.remote.b28ac1"
 
 metadata {
 	definition (name: "Zigbee - Xiaomi/Aqara/Opple Button/Switch/Remote", namespace: "oh-lalabs.com", author: "Markus Liljergren", filename: "zigbee-xiaomi-aqara-opple-button-switch-remote", importUrl: "https://raw.githubusercontent.com/markus-li/Hubitat/release/drivers/expanded/zigbee-xiaomi-aqara-opple-button-switch-remote-expanded.groovy") {
@@ -88,10 +95,11 @@ metadata {
 		
 		fingerprint deviceJoinName: "Aqara 2-button Light Switch (WXKG02LM) - 2018", model: "lumi.remote.b286acn01",  inClusters: "0000,0003,0019,FFFF,0012", outClusters: "0000,0004,0003,0005,0019,FFFF,0012", manufacturer: "LUMI", profileId: "0104", endpointId: "01"
 
-    fingerprint deviceJoinName: "Aqara D1 2-button Light Switch (WXKG07LM) - 2020", model: "lumi.remote.b286acn02",  inClusters: "0000,0003,0019,FFFF,0012", outClusters: "0000,0004,0003,0005,0019,FFFF,0012", manufacturer: "LUMI", profileId: "0104", endpointId: "01"
+        fingerprint deviceJoinName: "Aqara D1 2-button Light Switch (WXKG07LM) - 2020", model: "lumi.remote.b286acn02",  inClusters: "0000,0003,0019,FFFF,0012", outClusters: "0000,0004,0003,0005,0019,FFFF,0012", manufacturer: "LUMI", profileId: "0104", endpointId: "01"
 
         fingerprint deviceJoinName: "Aqara Opple 2 Button Remote (WXCJKG11LM)",      model: "lumi.remote.b286opcn01",     profileId:"0104", inClusters:"0012,0003", outClusters:"0006", manufacturer:"LUMI", application: "11", endpointId: "01"
         fingerprint profileId: "0104", inClusters: "0000,0003,0001", outClusters: "003,0006,0008,0300", model: "lumi.remote.b286opcn01", deviceJoinName: "Aqara Opple 2 Button Remote (WXCJKG11LM)"
+        fingerprint profileId: "0104", inClusters: "0000,0003,0001", outClusters: "003,0006,0008,0300", model: "lumi.remote.b28ac1",     deviceJoinName: "Aqara 2-button Light Switch (WRS-R02) - 2018"    // added kkossev
 
         fingerprint deviceJoinName: "Aqara Opple 4 Button Remote (WXCJKG12LM)",      model: "lumi.remote.b486opcn01",     profileId:"0104", inClusters:"0012,0003", outClusters:"0006", manufacturer:"LUMI", application: "11", endpointId: "01"
         fingerprint profileId: "0104", inClusters: "0000,0003,0001", outClusters: "003,0006,0008,0300", model: "lumi.remote.b486opcn01", deviceJoinName: "Aqara Opple 4 Button Remote (WXCJKG12LM)"
@@ -180,6 +188,10 @@ ArrayList<String> refreshActual(String newModelToSet) {
     setLogsOffTask(noLogWarning=true)
 
     String model = setCleanModelNameWithAcceptedModels(newModelToSet=newModelToSet)
+    if (debug == true && deviceSimulation == true && simulatedModel != null) {
+        model = simulatedModel
+        logging("refreshActual() : SIMULATING  model=$newModelToSet", 1)        
+    }
     switch(model) {
         case "lumi.sensor_switch":
             sendEvent(name:"numberOfButtons", value: 5, isStateChange: false, descriptionText: "Xiaomi Button (WXKG01LM) detected: set to 5 buttons")
@@ -225,6 +237,10 @@ ArrayList<String> refreshActual(String newModelToSet) {
             break
         case "lumi.remote.b286opcn01":
             sendEvent(name:"numberOfButtons", value: 10, isStateChange: false, descriptionText: "Aqara Oppo 2 Button Remote (WXCJKG11LM) detected: set to 10 buttons")
+            updateDataValue("physicalButtons", "2")
+            break
+        case "lumi.remote.b28ac1": // added kkossev
+            sendEvent(name:"numberOfButtons", value: 10, isStateChange: false, descriptionText: "Aqara H1 Wireless Remote Switch (Double Rocker) detected: set to 10 buttons")
             updateDataValue("physicalButtons", "2")
             break
         case "lumi.remote.b486opcn01":
@@ -279,7 +295,8 @@ String setCleanModelNameWithAcceptedModels(String newModelToSet=null) {
         "lumi.remote.b286acn02",
         "lumi.remote.b286opcn01", 
         "lumi.remote.b486opcn01",
-        "lumi.remote.b686opcn01"
+        "lumi.remote.b686opcn01",
+        "lumi.remote.b28ac1"    // added kkossev
     ])
 }
 
@@ -328,6 +345,7 @@ boolean isOppleModel(String model=null) {
         case "lumi.remote.b286opcn01":
         case "lumi.remote.b486opcn01":
         case "lumi.remote.b686opcn01":
+        case "lumi.remote.b28ac1":    // added kkossev
             return true
             break
         default:
@@ -730,7 +748,9 @@ void parseOppoButtonEvent(Map msgMap) {
 private String getDriverVersion() {
     comment = "Works with models WXKG01LM, WXKG11LM (2015 & 2018), WXKG12LM, WXKG02LM (2016 & 2018), WXKG03LM (2016 & 2018), WXCJKG11LM, WXCJKG12LM & WXCJKG13LM."
     if(comment != "") state.comment = comment
-    String version = "v1.0.1.1123"
+    String version = "v1.0.2.0829"
+    version += (debug==true) ? " debug version!" : ""
+    version += (deviceSimulation==true) ? " SIMULATION of model ${simulatedModel}" : ""
     logging("getDriverVersion() = ${version}", 100)
     sendEvent(name: "driver", value: version)
     updateDataValue('driver', version)
