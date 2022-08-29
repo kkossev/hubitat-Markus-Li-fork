@@ -3,7 +3,7 @@
  *
  *  Version: 
  *    v1.0.1.1123 2020-11-23 (Markus Li) - last version by Markus
- *    v1.0.2.0829 2022-08-29 (kkossev) - (development branch temporary version 10:45 AM) : added lumi.remote.b28ac1 (WRS-R02)
+ *    v1.0.2.0829 2022-08-29 (kkossev) - (development branch temporary version 2:07 PM) : added lumi.remote.b28ac1 (WRS-R02)
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
