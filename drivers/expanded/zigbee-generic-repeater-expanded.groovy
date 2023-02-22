@@ -19,11 +19,13 @@
  *
  *  ver. v1.0.1.1123 2020-11-23  (Markus) - Latest commit f0e09fe from Markus
  *  ver. 2.0.0 2023-02-08 (kkossev) - driver name changed to 'Zigbee - Generic Repeater (with healthStatus)'; capability 'PresenceSensor' replaced w/ capability 'HealthCheck' (attribute 'healthStatus')
+ *  ver. 2.0.1 2023-02-10 (kkossev) - More Ikea new models fingerprints
+ *  ver. 2.0.2 2023-02-22 (kkossev) - added Aeotec Zi extender (ZGA001) WG001-Z01 AL001
  *
  */
 
-def version() { "2.0.0" }
-def timeStamp() {"2023/02/08 5:10 PM"}
+def version() { "2.0.2" }
+def timeStamp() {"2023/02/22 9:11 PM"}
 
 // BEGIN:getDefaultImports()
 import groovy.json.JsonSlurper
@@ -74,6 +76,7 @@ metadata {
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,000A,0003", outClusters:"0019", model:"TS0207", manufacturer:"_TZ3000_nkkl7uzv"
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,000A,0003", outClusters:"0019", model:"TS0207", manufacturer:"_TZ3000_ufttklsz"
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,000A,0003", outClusters:"0019", model:"TS0207", manufacturer:"_TZ3000_m0vaazab"
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003", outClusters:"0003,0019", model:"WG001-Z01", manufacturer:"AL001"                // ZAG001-C15 //https://community.hubitat.com/t/ikea-repeaters-not-working-any-more/110490/22?u=kkossev
         
     }
 
