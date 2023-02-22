@@ -1,1 +1,9 @@
 *.bak
+.idea/.gitignore
+.idea/hubitat-Markus-Li-fork.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/libraries/uuid_version.xml
+apps/apps.iml
+drivers/drivers.iml
