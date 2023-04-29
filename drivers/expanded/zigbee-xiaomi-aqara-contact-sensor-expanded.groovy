@@ -23,7 +23,7 @@
  */
 
 def version() { "2.0.0" }
-def timeStamp() {"2023/04/29 6:54 PM"}
+def timeStamp() {"2023/04/29 7:12 PM"}
 
 // BEGIN:getDefaultImports()
 import groovy.json.JsonSlurper
@@ -53,6 +53,7 @@ metadata {
         attribute "lastCheckinEpoch", "number"
         attribute "notPresentCounter", "number"
         attribute "restoredCounter", "number"
+        attribute 'healthStatus', 'enum', ['unknown', 'offline', 'online']
         // END:  getMetadataAttributesForLastCheckin()
         // BEGIN:getZigbeeBatteryMetadataAttributes()
         attribute "batteryLastReplaced", "String"
@@ -126,7 +127,7 @@ ArrayList<String> refresh() {
     logging("refresh() model='${getDeviceDataByName('model')}'", 10)
     
     getDriverVersion()
-    configurePresence()
+    configureHealthCheck()
     startCheckEventInterval()
     resetBatteryReplacedDate(forced=false)
     setLogsOffTask(noLogWarning=true)
@@ -1470,7 +1471,10 @@ void configureDelayed() {
     runIn(30, "refresh")
 }
 
-void configurePresence() {
+void configureHealthCheck() {
+    if (device.currentState('presence') != null) {
+        device.deleteCurrentState('presence')
+    }
     prepareCounters()
     if(healthCheckEnable == null || healthCheckEnable == true) {
         Random rnd = new Random()
