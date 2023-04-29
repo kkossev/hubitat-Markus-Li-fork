@@ -18,12 +18,13 @@
  *  NOTE: This is an auto-generated file and most comments have been removed!
  *
  *  ver. v1.0.1.1123 2020-11-23  (Markus) - Latest commit f0e09fe from Markus
- *  ver. 2.0.0 2023-04-29 (kkossev) - driver name changed to 'Zigbee - Xiaomi/Aqara Contact Sensor( w/ healthStatus)'; capability 'PresenceSensor' replaced w/ capability 'HealthCheck' (attribute 'healthStatus')
+ *  ver. 2.0.0 2023-02-08 (kkossev) - driver name changed to 'Zigbee - Xiaomi/Aqara Contact Sensor( w/ healthStatus)'; capability 'PresenceSensor' replaced w/ capability 'HealthCheck' (attribute 'healthStatus')
+ *  ver. 2.0.1 2023-04-29 (kkossev) - explicitely remove the previous presence attribute on initialize()
  *
  */
 
 def version() { "2.0.0" }
-def timeStamp() {"2023/04/29 7:12 PM"}
+def timeStamp() {"2023/04/29 7:27 PM"}
 
 // BEGIN:getDefaultImports()
 import groovy.json.JsonSlurper
