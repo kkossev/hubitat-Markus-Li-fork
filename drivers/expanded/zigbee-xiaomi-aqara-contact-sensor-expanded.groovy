@@ -23,7 +23,7 @@
  */
 
 def version() { "2.0.0" }
-def timeStamp() {"2023/04/29 6:37 PM"}
+def timeStamp() {"2023/04/29 6:54 PM"}
 
 // BEGIN:getDefaultImports()
 import groovy.json.JsonSlurper
@@ -34,7 +34,7 @@ import java.security.MessageDigest
 import hubitat.helper.HexUtils
 
 metadata {
-	definition (name: "Zigbee - Xiaomi/Aqara Contact Sensor (w/ healthStatus)", namespace: "oh-lalabs.com", author: "Markus Liljergren", filename: "zigbee-xiaomi-aqara-contact-sensor", importUrl: "https://raw.githubusercontent.com/markus-li/Hubitat/release/drivers/expanded/zigbee-xiaomi-aqara-contact-sensor-expanded.groovy") {
+	definition (name: "Zigbee - Xiaomi/Aqara Contact Sensor (w/ healthStatus)", namespace: "oh-lalabs.com", author: "Markus Liljergren", filename: "zigbee-xiaomi-aqara-contact-sensor", importUrl: "https://raw.githubusercontent.com/kkossev/hubitat-Markus-Li-fork/release/drivers/expanded/zigbee-xiaomi-aqara-contact-sensor-expanded.groovy") {
         // BEGIN:getDefaultMetadataCapabilitiesForZigbeeDevices()
         capability "Sensor"
         capability "HealthCheck"        // replaced previous capability "PresenceSensor" 
