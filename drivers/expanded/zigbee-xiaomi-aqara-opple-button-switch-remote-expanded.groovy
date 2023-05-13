@@ -19,11 +19,12 @@
  *
  *  ver. v1.0.1.1123 2020-11-23  (Markus) - Latest commit f0e09fe from Markus
  *  ver. 2.0.0 2023-04-29 (kkossev) - driver name changed to 'Zigbee - Xiaomi/Aqara/Opple Button/Switch/Remote (w/ healthStatus)'; capability 'PresenceSensor' replaced w/ capability 'HealthCheck' (attribute 'healthStatus')
+ *  ver. 2.0.1 2023-05-13 (kkossev) - buh fix: error initializig the healthCheck after hub is rebbooted''
  *
  */
 
-def version() { "2.0.0" } 
-def timeStamp() {"2023/04/29 8:11 PM"}
+def version() { "2.0.1" } 
+def timeStamp() {"2023/05/13 4:43 PM"}
 
 // BEGIN:getDefaultImports()
 import groovy.json.JsonSlurper
@@ -247,7 +248,7 @@ ArrayList<String> refreshActual(String newModelToSet) {
         default:
             sendEvent(name:"numberOfButtons", value: 0, isStateChange: false, descriptionText: "UNKNOWN Button detected: set to 1 button")
     }
-    configurePresence()
+    configureHealthCheck()
     startCheckEventInterval()
 
     ArrayList<String> cmd = []
