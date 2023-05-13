@@ -19,7 +19,7 @@
  *
  *  ver. v1.0.1.1123 2020-11-23  (Markus) - Latest commit f0e09fe from Markus
  *  ver. 2.0.0 2023-04-29 (kkossev) - driver name changed to 'Zigbee - Xiaomi/Aqara/Opple Button/Switch/Remote (w/ healthStatus)'; capability 'PresenceSensor' replaced w/ capability 'HealthCheck' (attribute 'healthStatus')
- *  ver. 2.0.1 2023-05-13 (kkossev) - buh fix: error initializig the healthCheck after hub is rebbooted''
+ *  ver. 2.0.1 2023-05-13 (kkossev) - bug fix: error initializing the healthCheck after the hub is rebooted
  *
  */
 
