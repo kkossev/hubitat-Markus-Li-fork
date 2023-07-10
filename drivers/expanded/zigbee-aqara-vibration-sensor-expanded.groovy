@@ -28,7 +28,7 @@
  */
 
 def version() { "2.0.0" } 
-def timeStamp() {"2023/07/10 1:02 PM"}
+def timeStamp() {"2023/07/10 5:51 PM"}
 
 // BEGIN:getDefaultImports()
 import groovy.json.JsonSlurper
@@ -61,6 +61,7 @@ metadata {
         attribute "lastCheckinEpoch", "number"
         attribute "notPresentCounter", "number"
         attribute "restoredCounter", "number"
+        attribute 'healthStatus', 'enum', ['unknown', 'offline', 'online']
         // END:  getMetadataAttributesForLastCheckin()
         // BEGIN:getZigbeeBatteryMetadataAttributes()
         attribute "batteryLastReplaced", "String"
