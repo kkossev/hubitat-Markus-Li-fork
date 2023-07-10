@@ -1,7 +1,6 @@
 /**
  *  Copyright 2020 Markus Liljergren (https://oh-lalabs.com)
  *
- *  Version: v1.0.1.1123
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,7 +17,13 @@
  *
  *  NOTE: This is an auto-generated file and most comments have been removed!
  *
+ *  ver. v1.0.1.1123 2020-11-23  (Markus) - Latest commit f0e09fe from Markus
+ *  ver. 2.0.0 2023-07-10 (kkossev) - driver name changed to 'Zigbee - Tuya Alarm (w/ healthStatus)'; capability 'PresenceSensor' replaced w/ capability 'HealthCheck' (attribute 'healthStatus')
+ *
  */
+
+def version() { "2.0.0" } 
+def timeStamp() {"2023/07/10 12:39 PM"}
 
 // BEGIN:getDefaultImports()
 import groovy.json.JsonSlurper
@@ -29,10 +34,10 @@ import java.security.MessageDigest
 import hubitat.helper.HexUtils
 
 metadata {
-	definition (name: "Zigbee - Tuya Alarm", namespace: "oh-lalabs.com", author: "Markus Liljergren", filename: "zigbee-tuya-alarm", importUrl: "https://raw.githubusercontent.com/markus-li/Hubitat/release/drivers/expanded/zigbee-tuya-alarm-expanded.groovy") {
+	definition (name: "Zigbee - Tuya Alarm (w/ healthStatus)", namespace: "oh-lalabs.com", author: "Markus Liljergren", filename: "zigbee-tuya-alarm", importUrl: "https://raw.githubusercontent.com/kkossev/hubitat-Markus-Li-fork/release/drivers/expanded/zigbee-tuya-alarm-expanded.groovy") {
         // BEGIN:getDefaultMetadataCapabilitiesForZigbeeDevices()
         capability "Sensor"
-        capability "PresenceSensor"
+        capability "HealthCheck"        // replaced previous capability "PresenceSensor" 
         capability "Initialize"
         capability "Refresh"
         // END:  getDefaultMetadataCapabilitiesForZigbeeDevices()
@@ -87,8 +92,8 @@ metadata {
         // BEGIN:getMetadataPreferencesForLastCheckin()
         input(name: "lastCheckinEnable", type: "bool", title: styling_addTitleDiv("Enable Last Checkin Date"), description: styling_addDescriptionDiv("Records Date events if enabled"), defaultValue: true)
         input(name: "lastCheckinEpochEnable", type: "bool", title: styling_addTitleDiv("Enable Last Checkin Epoch"), description: styling_addDescriptionDiv("Records Epoch events if enabled"), defaultValue: false)
-        input(name: "presenceEnable", type: "bool", title: styling_addTitleDiv("Enable Presence"), description: styling_addDescriptionDiv("Enables Presence to indicate if the device has sent data within the last 3 hours (REQUIRES at least one of the Checkin options to be enabled)"), defaultValue: true)
-        input(name: "presenceWarningEnable", type: "bool", title: styling_addTitleDiv("Enable Presence Warning"), description: styling_addDescriptionDiv("Enables Presence Warnings in the Logs (default: true)"), defaultValue: true)
+        input(name: "healthCheckEnable", type: "bool", title: styling_addTitleDiv("Enable healthCheck"), description: styling_addDescriptionDiv("Enables <b>healthCheck</B> to indicate if the device has sent data within the last 3 hours (REQUIRES at least one of the Checkin options to be enabled)"), defaultValue: true)
+        input(name: "healthCheckWarningEnable", type: "bool", title: styling_addTitleDiv("Enable healthCheck Warning"), description: styling_addDescriptionDiv("Enables <b>Offline</b> Warnings in the Logs (default: true)"), defaultValue: true)
         // END:  getMetadataPreferencesForLastCheckin()
         // BEGIN:getMetadataPreferencesForRecoveryMode(defaultMode="Slow")
         input(name: "recoveryMode", type: "enum", title: styling_addTitleDiv("Recovery Mode"), description: styling_addDescriptionDiv("Select Recovery mode type (default: Slow)<br/>NOTE: The \"Insane\" and \"Suicidal\" modes may destabilize your mesh if run on more than a few devices at once!"), options: ["Disabled", "Slow", "Normal", "Insane", "Suicidal"], defaultValue: "Slow")
@@ -112,7 +117,7 @@ metadata {
 // BEGIN:getDeviceInfoFunction()
 String getDeviceInfoByName(infoName) { 
      
-    Map deviceInfo = ['name': 'Zigbee - Tuya Alarm', 'namespace': 'oh-lalabs.com', 'author': 'Markus Liljergren', 'filename': 'zigbee-tuya-alarm', 'importUrl': 'https://raw.githubusercontent.com/markus-li/Hubitat/release/drivers/expanded/zigbee-tuya-alarm-expanded.groovy']
+    Map deviceInfo = ['name': 'Zigbee - Tuya Alarm (w/ healthStatus)', 'namespace': 'oh-lalabs.com', 'author': 'Markus Liljergren', 'filename': 'zigbee-tuya-alarm', 'importUrl': 'https://raw.githubusercontent.com/kkossev/hubitat-Markus-Li-fork/release/drivers/expanded/zigbee-tuya-alarm-expanded.groovy']
      
     return(deviceInfo[infoName])
 }
@@ -124,7 +129,7 @@ ArrayList<String> refresh() {
     logging("refresh() model='${getDeviceDataByName('model')}'", 10)
     
     getDriverVersion()
-    configurePresence()
+    configureHealthCheck()
     startCheckEventInterval()
     setLogsOffTask(noLogWarning=true)
     
@@ -532,7 +537,7 @@ ArrayList<String> getTuyaCommand(Integer command, String payload) {
 private String getDriverVersion() {
     comment = "Works with the Tuya Alarm."
     if(comment != "") state.comment = comment
-    String version = "v1.0.1.1123"
+    String version = driverVersionAndTimeStamp()    // was "v1.0.1.1123"
     logging("getDriverVersion() = ${version}", 100)
     sendEvent(name: "driver", value: version)
     updateDataValue('driver', version)
@@ -1137,10 +1142,10 @@ void recoveryEvent(BigDecimal forcedMinutes=null) {
         sendZigbeeCommands(zigbee.readAttribute(CLUSTER_BASIC, 0x0004))
     }
     try {
-        checkPresence(displayWarnings=false)
+        deviceHealthCheck(displayWarnings=false)
         Integer mbe = getMaximumMinutesBetweenEvents(forcedMinutes=forcedMinutes)
         if(hasCorrectCheckinEvents(maximumMinutesBetweenEvents=mbe, displayWarnings=false) == true) {
-            if(presenceWarningEnable == null || presenceWarningEnable == true) log.warn("Event interval normal, recovery mode DEACTIVATED!")
+            if(healthCheckWarningEnable == null || healthCheckWarningEnable == true) log.warn("Event interval normal, recovery mode DEACTIVATED!")
             unschedule('recoveryEvent')
             unschedule('reconnectEvent')
         }
@@ -1181,7 +1186,7 @@ void checkEventInterval(boolean displayWarnings=true) {
         try {
             if(hasCorrectCheckinEvents(maximumMinutesBetweenEvents=mbe) == false) {
                 recoveryMode = recoveryMode == null ? "Normal" : recoveryMode
-                if(displayWarnings == true && (presenceWarningEnable == null || presenceWarningEnable == true)) log.warn("Event interval INCORRECT, recovery mode ($recoveryMode) ACTIVE! If this is shown every hour for the same device and doesn't go away after three times, the device has probably fallen off and require a quick press of the reset button or possibly even re-pairing. It MAY also return within 24 hours, so patience MIGHT pay off.")
+                if(displayWarnings == true && (healthCheckWarningEnable == null || healthCheckWarningEnable == true)) log.warn("Event interval INCORRECT, recovery mode ($recoveryMode) ACTIVE! If this is shown every hour for the same device and doesn't go away after three times, the device has probably fallen off and require a quick press of the reset button or possibly even re-pairing. It MAY also return within 24 hours, so patience MIGHT pay off.")
                 scheduleRecoveryEvent()
             }
         } catch(Exception e) {
@@ -1214,7 +1219,7 @@ void forceRecoveryMode(BigDecimal minutes) {
         disableForcedRecoveryMode()
     } else if(hasCorrectCheckinEvents(maximumMinutesBetweenEvents=minutesI) == false) {
         recoveryMode = recoveryMode == null ? "Normal" : recoveryMode
-        if(presenceWarningEnable == null || presenceWarningEnable == true) log.warn("Forced recovery mode ($recoveryMode) ACTIVATED!")
+        if(healthCheckWarningEnable == null || healthCheckWarningEnable == true) log.warn("Forced recovery mode ($recoveryMode) ACTIVATED!")
         state.forcedMinutes = minutes
         runIn(minutesI * 60, 'disableForcedRecoveryMode')
 
@@ -1228,7 +1233,7 @@ void disableForcedRecoveryMode() {
     state.forcedMinutes = 0
     unschedule('recoveryEvent')
     unschedule('reconnectEvent')
-    if(presenceWarningEnable == null || presenceWarningEnable == true) log.warn("Forced recovery mode DEACTIVATED!")
+    if(healthCheckWarningEnable == null || healthCheckWarningEnable == true) log.warn("Forced recovery mode DEACTIVATED!")
 }
 
 void updateManufacturer(String manfacturer) {
@@ -1827,15 +1832,18 @@ void configureDelayed() {
     runIn(30, "refresh")
 }
 
-void configurePresence() {
+void configureHealthCheck() {
+    if (device.currentState('presence') != null) {
+        device.deleteCurrentState('presence')
+    }
     prepareCounters()
-    if(presenceEnable == null || presenceEnable == true) {
+    if(healthCheckEnable == null || healthCheckEnable == true) {
         Random rnd = new Random()
-        schedule("${rnd.nextInt(59)} ${rnd.nextInt(59)} 1/3 * * ? *", 'checkPresence')
-        checkPresence(false)
+        schedule("${rnd.nextInt(59)} ${rnd.nextInt(59)} 1/3 * * ? *", 'deviceHealthCheck')
+        deviceHealthCheck(false)
     } else {
-        sendEvent(name: "presence", value: "not present", descriptionText: "Presence Checking Disabled" )
-        unschedule('checkPresence')
+        sendEvent(name: "healthStatus", value: "unknown", descriptionText: "Health Checking Disabled" )
+        unschedule('deviceHealthCheck')
     }
 }
 
@@ -1847,7 +1855,7 @@ void stopSchedules() {
 void prepareCounters() {
     if(device.currentValue('restoredCounter') == null) sendEvent(name: "restoredCounter", value: 0, descriptionText: "Initialized to 0" )
     if(device.currentValue('notPresentCounter') == null) sendEvent(name: "notPresentCounter", value: 0, descriptionText: "Initialized to 0" )
-    if(device.currentValue('presence') == null) sendEvent(name: "presence", value: "unknown", descriptionText: "Initialized as Unknown" )
+    if(device.currentValue('healthStatus') == null) sendEvent(name: "healthStatus", value: "unknown", descriptionText: "Initialized as Unknown" )
 }
 
 boolean isValidDate(String dateFormat, String dateString) {
@@ -1920,13 +1928,13 @@ Long secondsSinceLastCheckinEvent() {
 boolean hasCorrectCheckinEvents(Integer maximumMinutesBetweenEvents=90, boolean displayWarnings=true) {
     Long secondsSinceLastCheckin = secondsSinceLastCheckinEvent()
     if(secondsSinceLastCheckin != null && secondsSinceLastCheckin > maximumMinutesBetweenEvents * 60) {
-        if(displayWarnings == true && (presenceWarningEnable == null || presenceWarningEnable == true)) log.warn("One or several EXPECTED checkin events have been missed! Something MIGHT be wrong with the mesh for this device. Minutes since last checkin: ${Math.round(secondsSinceLastCheckin / 60)} (maximum expected $maximumMinutesBetweenEvents)")
+        if(displayWarnings == true && (healthCheckWarningEnable == null || healthCheckWarningEnable == true)) log.warn("One or several EXPECTED checkin events have been missed! Something MIGHT be wrong with the mesh for this device. Minutes since last checkin: ${Math.round(secondsSinceLastCheckin / 60)} (maximum expected $maximumMinutesBetweenEvents)")
         return false
     }
     return true
 }
 
-boolean checkPresence(boolean displayWarnings=true) {
+boolean deviceHealthCheck(boolean displayWarnings=true) {
     boolean isPresent = false
     Long lastCheckinTime = null
     String lastCheckinVal = device.currentValue('lastCheckin')
@@ -1939,12 +1947,12 @@ boolean checkPresence(boolean displayWarnings=true) {
         setAsPresent()
         isPresent = true
     } else {
-        sendEvent(name: "presence", value: "not present")
+        sendEvent(name: "healthStatus", value: "offline")
         if(displayWarnings == true) {
             Integer numNotPresent = device.currentValue('notPresentCounter')
             numNotPresent = numNotPresent == null ? 1 : numNotPresent + 1
             sendEvent(name: "notPresentCounter", value: numNotPresent )
-            if(presenceWarningEnable == null || presenceWarningEnable == true) {
+            if(healthCheckWarningEnable == null || healthCheckWarningEnable == true) {
                 log.warn("No event seen from the device for over 3 hours! Something is not right... (consecutive events: $numNotPresent)")
             }
         }
@@ -1953,13 +1961,13 @@ boolean checkPresence(boolean displayWarnings=true) {
 }
 
 void setAsPresent() {
-    if(device.currentValue('presence') == "not present") {
+    if(device.currentValue('healthStatus') != "online") {
         Integer numRestored = device.currentValue('restoredCounter')
         numRestored = numRestored == null ? 1 : numRestored + 1
         sendEvent(name: "restoredCounter", value: numRestored )
         sendEvent(name: "notPresentCounter", value: 0 )
     }
-    sendEvent(name: "presence", value: "present")
+    sendEvent(name: "healthStatus", value: "online")
 }
 
 void resetNotPresentCounter() {
@@ -1971,4 +1979,9 @@ void resetRestoredCounter() {
     logging("resetRestoredCounter()", 100)
     sendEvent(name: "restoredCounter", value: 0, descriptionText: "Reset restoredCounter to 0" )
 }
+
+void ping() {
+    logging("ping() is not implemented", 100)
+}
+
 // END:  getHelperFunctions('driver-default')
