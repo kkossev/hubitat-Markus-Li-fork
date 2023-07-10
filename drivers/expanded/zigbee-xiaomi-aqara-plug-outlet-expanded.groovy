@@ -23,7 +23,7 @@
  */
 
 def version() { "2.0.0" } 
-def timeStamp() {"2023/07/10 11:41 AM"}
+def timeStamp() {"2023/07/10 5:54 PM"}
 
 // BEGIN:getDefaultImports()
 import groovy.json.JsonSlurper
@@ -58,6 +58,7 @@ metadata {
         attribute "lastCheckinEpoch", "number"
         attribute "notPresentCounter", "number"
         attribute "restoredCounter", "number"
+        attribute 'healthStatus', 'enum', ['unknown', 'offline', 'online']        
         // END:  getMetadataAttributesForLastCheckin()
 
         // BEGIN:getCommandsForPresence()
