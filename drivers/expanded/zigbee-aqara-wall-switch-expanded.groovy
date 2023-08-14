@@ -25,7 +25,7 @@
  */
 
 def version() { "2.0.2" } 
-def timeStamp() {"2023/08/14 10:54 PM"}
+def timeStamp() {"2023/08/14 11:18 PM"}
 
 // BEGIN:getDefaultImports()
 import groovy.json.JsonSlurper
@@ -108,8 +108,7 @@ metadata {
 
         fingerprint model:"lumi.switch.b2laus01", manufacturer:"LUMI", profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006", outClusters:"", application:"16"
         
-        fingerprint endpointId: "01", profileId: "0104", deviceId: "0100", inClusters: "0000,0002,0003,0004,0005,0006,0009,0702,0B04", outClusters: "000A,0019", manufacturer: "LUMI", model: "lumi.switch.b2naus01", deviceJoinName: "Aqara US Wall Switch w/ Neutral Double Rocker"    // added kkossev 08/14/2023
-        fingerprint endpointId: "01", profileId: "0104", deviceId: "0100", inClusters: "0000,0002,0003,0004,0005,0006,0009,0702,FCC0", outClusters: "000A,0019", manufacturer: "LUMI", model: "lumi.switch.b2naus01", deviceJoinName: "Aqara US Wall Switch w/ Neutral Double Rocker"    // added kkossev 08/14/2023
+        fingerprint profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006", model:"lumi.switch.b2naus01", manufacturer:"LUMI", deviceJoinName: "Aqara US Wall Switch w/ Neutral Double Rocker"    // added kkossev 08/14/2023
         
         }
 
