@@ -19,11 +19,12 @@
  *
  *  ver. v1.0.1.1123 2020-11-23  (Markus) - Latest commit f0e09fe from Markus
  *  ver. 2.0.0 2023-07-10 (kkossev) - driver name changed to 'Zigbee - Aqara Wall Switch (w/ healthStatus)'; capability 'PresenceSensor' replaced w/ capability 'HealthCheck' (attribute 'healthStatus')
+ *  ver. 2.0.1 2023-08-14 (kkossev) - bug fix: obttaining driver version exception
  *
  */
 
-def version() { "2.0.0" } 
-def timeStamp() {"2023/07/10 5:49 PM"}
+def version() { "2.0.1" } 
+def timeStamp() {"2023/08/14 8:23 PM"}
 
 // BEGIN:getDefaultImports()
 import groovy.json.JsonSlurper
@@ -778,6 +779,8 @@ void setAsConnected(BigDecimal button) {
  *  --- Nothings to edit here, move along! --------------------------------------
  *  -----------------------------------------------------------------------------
  */
+
+def driverVersionAndTimeStamp() {version()+' '+timeStamp()}
 
 // BEGIN:getDefaultFunctions()
 private String getDriverVersion() {
