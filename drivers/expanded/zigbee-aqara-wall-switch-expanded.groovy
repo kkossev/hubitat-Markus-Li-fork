@@ -20,11 +20,12 @@
  *  ver. v1.0.1.1123 2020-11-23  (Markus) - Latest commit f0e09fe from Markus
  *  ver. 2.0.0 2023-07-10 (kkossev) - driver name changed to 'Zigbee - Aqara Wall Switch (w/ healthStatus)'; capability 'PresenceSensor' replaced w/ capability 'HealthCheck' (attribute 'healthStatus')
  *  ver. 2.0.1 2023-08-14 (kkossev) - bug fix: obttaining driver version exception
+ *  ver. 2.0.2 2023-08-14 (kkossev) - an attempt to add lumi.switch.b2naus01 Model WS-USC04 Aqara US Wall Switch w/ Neutral Double Rocker
  *
  */
 
 def version() { "2.0.1" } 
-def timeStamp() {"2023/08/14 8:23 PM"}
+def timeStamp() {"2023/08/14 10:24 PM"}
 
 // BEGIN:getDefaultImports()
 import groovy.json.JsonSlurper
@@ -106,6 +107,9 @@ metadata {
         fingerprint profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006,0012,FCC0", model:"lumi.switch.l3acn3", manufacturer:"LUMI"
 
         fingerprint model:"lumi.switch.b2laus01", manufacturer:"LUMI", profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006", outClusters:"", application:"16"
+        
+        fingerprint endpointId: "01", profileId: "0104", deviceId: "0100", inClusters: "0000,0002,0003,0004,0005,0006,0009,0702,0B04", outClusters: "000A,0019", manufacturer: "LUMI", model: "lumi.switch.b2naus01", deviceJoinName: "Aqara US Wall Switch w/ Neutral Double Rocker"    // added kkossev 08/14/2023
+        fingerprint endpointId: "01", profileId: "0104", deviceId: "0100", inClusters: "0000,0002,0003,0004,0005,0006,0009,0702,FCC0", outClusters: "000A,0019", manufacturer: "LUMI", model: "lumi.switch.b2naus01", deviceJoinName: "Aqara US Wall Switch w/ Neutral Double Rocker"    // added kkossev 08/14/2023
         
         }
 
@@ -216,6 +220,11 @@ Integer refresh(boolean connectButtons=false) {
             physicalButtons = 2
             buttonCombos = 2
             break
+        case "lumi.switch.b2naus01":
+            sendEvent(name:"numberOfButtons", value: 4, isStateChange: false, descriptionText: "Aqara US Switch (WS-USC04) detected: set to 4 buttons (physical 2)")    // (With Neutral, Double Rocker)
+            physicalButtons = 2
+            buttonCombos = 2
+            break
         default:
             sendEvent(name:"numberOfButtons", value: 0, isStateChange: false, descriptionText: "UNKNOWN Button detected: set to 1 button")
             updateDataValue("physicalButtons", "0")
@@ -316,7 +325,8 @@ String setCleanModelNameWithAcceptedModels(String newModelToSet=null) {
         "lumi.switch.b2nacn02",
         "lumi.switch.b3nacn02",
         "lumi.relay.c2acn01",
-        "lumi.switch.b2laus01"
+        "lumi.switch.b2laus01",
+        "lumi.switch.b2naus01"
     ])
 }
 
@@ -389,6 +399,7 @@ boolean isKnownModel(String model=null) {
         case "lumi.switch.l3acn3":
         case "lumi.relay.c2acn01":
         case "lumi.switch.b2laus01":
+        case "lumi.switch.b2naus01":
             return true
             break
         default:
