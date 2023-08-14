@@ -19,6 +19,7 @@
  *
  *  ver. v1.0.1.1123 2020-11-23  (Markus) - Latest commit f0e09fe from Markus
  *  ver. 2.0.0 2023-07-10 (kkossev) - driver name changed to 'Zigbee - Aqara Vibration Sensor (w/ healthStatus)'; capability 'PresenceSensor' replaced w/ capability 'HealthCheck' (attribute 'healthStatus')
+ *  ver. 2.0.1 2023-08-14 (kkossev) - bug fix: obtaining driver version exception
  *
  */
 
@@ -27,8 +28,8 @@
    github.com/veeceeoh/xiaomi-hubitat/blob/master/devicedrivers/xiaomi-aqara-vibration-sensor-hubitat.src/xiaomi-aqara-vibration-sensor-hubitat.groovy
  */
 
-def version() { "2.0.0" } 
-def timeStamp() {"2023/07/10 5:51 PM"}
+def version() { "2.0.1" } 
+def timeStamp() {"2023/08/14 8:32 PM"}
 
 // BEGIN:getDefaultImports()
 import groovy.json.JsonSlurper
@@ -530,6 +531,8 @@ void updateTimestamp(String type) {
  *  --- Nothings to edit here, move along! --------------------------------------
  *  -----------------------------------------------------------------------------
  */
+
+def driverVersionAndTimeStamp() {version()+' '+timeStamp()}
 
 // BEGIN:getDefaultFunctions()
 private String getDriverVersion() {
