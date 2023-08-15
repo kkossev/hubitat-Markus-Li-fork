@@ -21,11 +21,12 @@
  *  ver. 2.0.0 2023-07-10 (kkossev) - driver name changed to 'Zigbee - Aqara Wall Switch (w/ healthStatus)'; capability 'PresenceSensor' replaced w/ capability 'HealthCheck' (attribute 'healthStatus')
  *  ver. 2.0.1 2023-08-14 (kkossev) - bug fix: obttaining driver version exception
  *  ver. 2.0.2 2023-08-14 (kkossev) - added lumi.switch.b2naus01 Model WS-USC04 Aqara US Wall Switch w/ Neutral Double Rocker (D1 series)
+ *  ver. 2.0.3 2023-08-15 (kkossev) - an attempt to add lumi.switch.b2laus01 Model WS-USC02 Aqara US Wall Switch w/o Neutral Double Rocker into the D1 series group.
  *
  */
 
-def version() { "2.0.2" } 
-def timeStamp() {"2023/08/14 11:18 PM"}
+def version() { "2.0.3" } 
+def timeStamp() {"2023/08/15 7:19 AM"}
 
 // BEGIN:getDefaultImports()
 import groovy.json.JsonSlurper
@@ -373,6 +374,7 @@ boolean isD1NonNeutralSwitch(String model=null) {
         case "lumi.switch.b1lacn02":
         case "lumi.switch.b2lacn02":
         case "lumi.switch.l3acn3":
+        case "lumi.switch.b2laus01":
             return true
             break
         default:
