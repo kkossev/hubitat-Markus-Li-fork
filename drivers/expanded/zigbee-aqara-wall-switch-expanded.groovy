@@ -21,12 +21,16 @@
  *  ver. 2.0.0 2023-07-10 (kkossev) - driver name changed to 'Zigbee - Aqara Wall Switch (w/ healthStatus)'; capability 'PresenceSensor' replaced w/ capability 'HealthCheck' (attribute 'healthStatus')
  *  ver. 2.0.1 2023-08-14 (kkossev) - bug fix: obttaining driver version exception
  *  ver. 2.0.2 2023-08-14 (kkossev) - added lumi.switch.b2naus01 Model WS-USC04 Aqara US Wall Switch w/ Neutral Double Rocker (D1 series)
- *  ver. 2.0.3 2023-08-15 (kkossev) - an attempt to add lumi.switch.b2laus01 Model WS-USC02 Aqara US Wall Switch w/o Neutral Double Rocker into the D1 series group.
+ *  ver. 2.0.3 2023-08-15 (kkossev) - added lumi.switch.b2laus01 Model WS-USC02 Aqara US Wall Switch w/o Neutral Double Rocker into the D1 series group.
+ *  ver. 2.0.4 2023-08-29 (kkossev) - added lumi.switch.b1naus01 Model WS-USC03US Aqara Wall Switch (With Neutral, Single Rocker)
+ *
+ *                                    TODO: check healthStatus 
+ *                                    TODO: set the Recovery Mode to disabled by default.
  *
  */
 
-def version() { "2.0.3" } 
-def timeStamp() {"2023/08/15 7:19 AM"}
+def version() { "2.0.4" } 
+def timeStamp() {"2023/08/29 8:50 PM"}
 
 // BEGIN:getDefaultImports()
 import groovy.json.JsonSlurper
@@ -107,9 +111,11 @@ metadata {
 
         fingerprint profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006,0012,FCC0", model:"lumi.switch.l3acn3", manufacturer:"LUMI"
 
-        fingerprint model:"lumi.switch.b2laus01", manufacturer:"LUMI", profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006", outClusters:"", application:"16"
+        fingerprint profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006", model:"lumi.switch.b2laus01", manufacturer:"LUMI", deviceJoinName: "Aqara WS-USC04 US Wall Switch w/o Neutral Double Rocker"       // modified kkossev 08/15/2023
         
-        fingerprint profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006", model:"lumi.switch.b2naus01", manufacturer:"LUMI", deviceJoinName: "Aqara US Wall Switch w/ Neutral Double Rocker"    // added kkossev 08/14/2023
+        fingerprint profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006", model:"lumi.switch.b2naus01", manufacturer:"LUMI", deviceJoinName: "Aqara WS-USC02 US Wall Switch w/ Neutral Double Rocker"        // added kkossev 08/14/2023
+
+        fingerprint profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006", model:"lumi.switch.b1naus01", manufacturer:"LUMI", deviceJoinName: "Aqara WS-USC03US Aqara Wall Switch w/ Neutral Single Rocker"  // added kkossev 08/29/2023
         
         }
 
@@ -225,6 +231,10 @@ Integer refresh(boolean connectButtons=false) {
             physicalButtons = 2
             buttonCombos = 2
             break
+        case "lumi.switch.b1naus01":
+            sendEvent(name:"numberOfButtons", value: 2, isStateChange: false, descriptionText: "Aqara US Switch (WS-USC03US) detected: set to 2 buttons (physical 1)")
+            physicalButtons = 1
+            break        
         default:
             sendEvent(name:"numberOfButtons", value: 0, isStateChange: false, descriptionText: "UNKNOWN Button detected: set to 1 button")
             updateDataValue("physicalButtons", "0")
@@ -326,7 +336,8 @@ String setCleanModelNameWithAcceptedModels(String newModelToSet=null) {
         "lumi.switch.b3nacn02",
         "lumi.relay.c2acn01",
         "lumi.switch.b2laus01",
-        "lumi.switch.b2naus01"
+        "lumi.switch.b2naus01",
+        "lumi.switch.b1naus01"
     ])
 }
 
@@ -361,6 +372,7 @@ boolean isD1NeutralSwitch(String model=null) {
         case "lumi.switch.b2nacn02":
         case "lumi.switch.b3nacn02":
         case "lumi.switch.b2naus01":
+        case "lumi.switch.b1naus01":
             return true
             break
         default:
@@ -402,6 +414,7 @@ boolean isKnownModel(String model=null) {
         case "lumi.relay.c2acn01":
         case "lumi.switch.b2laus01":
         case "lumi.switch.b2naus01":
+        case "lumi.switch.b1naus01":
             return true
             break
         default:
