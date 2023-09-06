@@ -23,7 +23,7 @@
  *  ver. 2.0.2 2023-08-14 (kkossev) - added lumi.switch.b2naus01 Model WS-USC04 Aqara US Wall Switch w/ Neutral Double Rocker (D1 series)
  *  ver. 2.0.3 2023-08-15 (kkossev) - added lumi.switch.b2laus01 Model WS-USC02 Aqara US Wall Switch w/o Neutral Double Rocker into the D1 series group.
  *  ver. 2.0.4 2023-08-29 (kkossev) - added lumi.switch.b1naus01 Model WS-USC03US Aqara Wall Switch (With Neutral, Single Rocker)
- *  ver. 2.0.5 2023-09-06 (kkossev) - lumi.switch.b1naus01 new fingerprint
+ *  ver. 2.0.5 2023-09-06 (kkossev) - new fingerprints
  *
  *                                    TODO: check healthStatus 
  *                                    TODO: set the Recovery Mode to disabled by default.
@@ -31,7 +31,7 @@
  */
 
 def version() { "2.0.5" } 
-def timeStamp() {"2023/09/29 5:58 PM"}
+def timeStamp() {"2023/09/29 7:32 PM"}
 
 // BEGIN:getDefaultImports()
 import groovy.json.JsonSlurper
@@ -100,17 +100,21 @@ metadata {
 
         /* D1 Models WITH Neutral wire */
         
-        fingerprint profileId: "0104", inClusters: "0000,0004,0003,0006,0010,0005,000A,0001,0002", outClusters: "0019,000A", manufacturer: "LUMI", model: "lumi.switch.b1nacn02", application: "3D", deviceJoinName: "Aqara D1 Double Relay"
-        fingerprint profileId: "0104", inClusters: "0000,0004,0003,0006,0010,0005,000A,0001,0002", outClusters: "0019,000A", manufacturer: "LUMI", model: "lumi.switch.b2nacn02", application: "3D", deviceJoinName: "Aqara D1 Double Relay"
-        fingerprint profileId: "0104", inClusters: "0000,0004,0003,0006,0010,0005,000A,0001,0002", outClusters: "0019,000A", manufacturer: "LUMI", model: "lumi.switch.b3nacn02", application: "3D", deviceJoinName: "Aqara D1 Double Relay"
-        fingerprint profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006,0012,FCC0", model:"lumi.switch.b1lacn02", manufacturer:"LUMI"
-        fingerprint profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006,0012,FCC0", model:"lumi.switch.b2lacn02", manufacturer:"LUMI"
-        fingerprint profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006,0012,FCC0", model:"lumi.switch.l3acn3", manufacturer:"LUMI"
-        fingerprint profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006", model:"lumi.switch.b2laus01", manufacturer:"LUMI", deviceJoinName: "Aqara WS-USC04 US Wall Switch w/o Neutral Double Rocker"       // modified kkossev 08/15/2023
-        fingerprint profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006", model:"lumi.switch.b2naus01", manufacturer:"LUMI", deviceJoinName: "Aqara WS-USC02 US Wall Switch w/ Neutral Double Rocker"        // added kkossev 08/14/2023
-        fingerprint profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006", model:"lumi.switch.b1naus01", manufacturer:"LUMI", deviceJoinName: "Aqara WS-USC03US Aqara Wall Switch w/ Neutral Single Rocker"  // added kkossev 08/29/2023
-        fingerprint profileId:"0104", endpointId:"02", inClusters:"0000,0002,0003,0004,0005,0006,0009,0702,0B04", outClusters: "0019,000A", model:"lumi.switch.b1naus01", manufacturer:"LUMI", deviceJoinName: "Aqara WS-USC03US Aqara Wall Switch w/ Neutral Single Rocker"  // added kkossev 09/06/2023
-        
+        fingerprint profileId:"0104", inClusters:"0000,0004,0003,0006,0010,0005,000A,0001,0002", outClusters:"0019,000A", manufacturer:"LUMI", model:"lumi.switch.b1nacn02", application:"3D", deviceJoinName:"Aqara D1 Double Relay"
+        fingerprint profileId:"0104", inClusters:"0000,0004,0003,0006,0010,0005,000A,0001,0002", outClusters:"0019,000A", manufacturer:"LUMI", model:"lumi.switch.b2nacn02", application:"3D", deviceJoinName:"Aqara D1 Double Relay"
+        fingerprint profileId:"0104", inClusters:"0000,0004,0003,0006,0010,0005,000A,0001,0002", outClusters:"0019,000A", manufacturer:"LUMI", model:"lumi.switch.b3nacn02", application:"3D", deviceJoinName:"Aqara D1 Double Relay"
+        fingerprint profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006,0012,FCC0", outClusters:"0019,000A", model:"lumi.switch.b1lacn02", manufacturer:"LUMI"
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003,0001,0002,0019,000A", outClusters:"0000,0019,000A", model:"lumi.switch.b1lacn02", manufacturer:"LUMI"                                                                                           // added kkossev 09/06/2023
+        fingerprint profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006,0012,FCC0", outClusters:"0019,000A", model:"lumi.switch.b2lacn02", manufacturer:"LUMI"
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003,0001,0002,0019,000A", outClusters:"0000,0019,000A", model:"lumi.switch.b2lacn02", manufacturer:"LUMI"                                                                                           // added kkossev 09/06/2023
+        fingerprint profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006,0012,FCC0", outClusters:"0019,000A", model:"lumi.switch.l3acn3", manufacturer:"LUMI"
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0002,0003,0004,0005,0006,0009", outClusters:"0019,000A", model:"lumi.switch.l3acn3", manufacturer:"LUMI"                                                                                             // added kkossev 09/06/2023
+        fingerprint profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006", outClusters:"0019,000A", model:"lumi.switch.b2laus01", manufacturer:"LUMI", deviceJoinName: "Aqara WS-USC04 US Wall Switch w/o Neutral Double Rocker"                          // modified kkossev 08/15/2023
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0002,0003,0004,0005,0006,0009", outClusters:"0019,000A", model:"lumi.switch.b2laus01", manufacturer:"LUMI", deviceJoinName: "Aqara WS-USC04 US Wall Switch w/o Neutral Double Rocker"                // added kkossev 09/06/2023 // https://community.hubitat.com/t/aqara-single-and-double-rocker-switch-no-neutral-ws-usc01-ws-usc02-driver/99124/5?u=kkossev
+        fingerprint profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006", outClusters:"0019,000A", model:"lumi.switch.b2naus01", manufacturer:"LUMI", deviceJoinName: "Aqara WS-USC02 US Wall Switch w/ Neutral Double Rocker"                           // added kkossev 08/14/2023
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0002,0003,0004,0005,0006,0009,0012,0702,FCC0", outClusters:"0019,000A", model:"lumi.switch.b2naus01", manufacturer:"LUMI", deviceJoinName: "Aqara WS-USC03US Aqara Wall Switch w/ Neutral Single Rocker"  // added kkossev 09/06/2023
+        fingerprint profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006", outClusters:"0019,000A", model:"lumi.switch.b1naus01", manufacturer:"LUMI", deviceJoinName: "Aqara WS-USC03US Aqara Wall Switch w/ Neutral Single Rocker"                      // added kkossev 08/29/2023
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0002,0003,0004,0005,0006,0009,0702,0B04", outClusters:"0019,000A", model:"lumi.switch.b1naus01", manufacturer:"LUMI", deviceJoinName: "Aqara WS-USC03US Aqara Wall Switch w/ Neutral Single Rocker"  // added kkossev 09/06/2023
         }
 
     preferences {
