@@ -20,11 +20,12 @@
  *  ver. v1.0.1.1123 2020-11-23  (Markus) - Latest commit f0e09fe from Markus
  *  ver. 2.0.0 2023-04-29 (kkossev) - driver name changed to 'Zigbee - Xiaomi/Aqara/Opple Button/Switch/Remote (w/ healthStatus)'; capability 'PresenceSensor' replaced w/ capability 'HealthCheck' (attribute 'healthStatus')
  *  ver. 2.0.1 2023-05-13 (kkossev) - bug fix: error initializing the healthCheck after the hub is rebooted
+ *  ver. 2.0.2 2023-11-26 (kkossev) - added push, doubleTapped, released, held button handlers (for use in HE Dashboards);
  *
  */
 
-def version() { "2.0.1" } 
-def timeStamp() {"2023/05/13 4:43 PM"}
+def version() { "2.0.2" } 
+def timeStamp() {"2023/11/26 9:54 PM"}
 
 // BEGIN:getDefaultImports()
 import groovy.json.JsonSlurper
@@ -2264,6 +2265,29 @@ boolean buttonDoubleTapped(Integer button) {
     }
     return active
 }
+
+def buttonEvent(buttonNumber, buttonState, isDigital=false) {
+    def event = [name: buttonState, value: buttonNumber.toString(), data: [buttonNumber: buttonNumber], descriptionText: "button $buttonNumber was $buttonState", isStateChange: true, type: isDigital==true ? 'digital' : 'physical']
+    logging("${device.displayName} $event.descriptionText", 100)    
+    sendEvent(event)
+}
+
+def push(buttonNumber) {
+    buttonEvent(buttonNumber, "pushed", isDigital=true)
+}
+
+def doubleTap(buttonNumber) {
+    buttonEvent(buttonNumber, "doubleTapped", isDigital=true)
+}
+
+def hold(buttonNumber) {
+    buttonEvent(buttonNumber, "held", isDigital=true)
+}
+
+def release(buttonNumber) {
+    buttonEvent(buttonNumber, "released", isDigital=true)
+}
+
 
 void componentRefresh(com.hubitat.app.DeviceWrapper cd) {
     logging("componentRefresh() from $cd.deviceNetworkId", 1)
