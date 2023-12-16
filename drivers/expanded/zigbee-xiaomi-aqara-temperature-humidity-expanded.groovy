@@ -19,11 +19,12 @@
  *
  *  ver. v1.0.1.1123 2020-11-23  (Markus) - Latest commit f0e09fe from Markus
  *  ver. 2.0.0 2023-04-29 (kkossev) - driver name changed to 'Zigbee - Xiaomi/Aqara Temperature & Humidity Sensor(w/ healthStatus)'; capability 'PresenceSensor' replaced w/ capability 'HealthCheck' (attribute 'healthStatus')
+ *  ver. 2.0.1 2023-12-16 (kkossev) - added lumi.sensor_ht WSDCGQ12LM
  *
  */
 
-def version() { "2.0.0" } 
-def timeStamp() {"2023/04/29 9:17 PM"}
+def version() { "2.0.1" } 
+def timeStamp() {"2023/12/16 9:40 AM"}
 
 // BEGIN:getDefaultImports()
 import groovy.json.JsonSlurper
@@ -76,11 +77,11 @@ metadata {
         fingerprint deviceJoinName: "Xiaomi Temperature & Humidity Sensor (WSDCGQ01LM)", model: "lumi.sens", profileId: "0104", endpointId: 01, inClusters: "0000,0003,0019,FFFF,0012", outClusters: "0000,0004,0003,0005,0019,FFFF,0012", manufacturer: "LUMI"
         fingerprint deviceJoinName: "Xiaomi Temperature & Humidity Sensor (WSDCGQ01LM)", model: "lumi.sensor_ht", profileId: "0104", endpointId: 01, inClusters: "0000,0003,0019,FFFF,0012", outClusters: "0000,0004,0003,0005,0019,FFFF,0012", manufacturer: "LUMI"
 
-        fingerprint deviceJoinName: "Aqara Temperature, Humidity & Pressure Sensor (WSDCGQ11LM)", model: "lumi.weather", modelType: "Aqara WSDCGQ11LM", profileId: "0104", endpointId: 01, application: 03, inClusters: "0000,0003,FFFF,0402,0403,0405", outClusters: "0000,0004,FFFF", manufacturer: "LUMI"
+        fingerprint deviceJoinName: "Aqara Temperature, Humidity & Pressure Sensor (WSDCGQ11LM)", model: "lumi.weather",         modelType: "Aqara WSDCGQ11LM", profileId: "0104", endpointId: 01, application: 03, inClusters: "0000,0003,FFFF,0402,0403,0405", outClusters: "0000,0004,FFFF", manufacturer: "LUMI"
+        fingerprint deviceJoinName: "Aqara Temperature, Humidity & Pressure Sensor (WSDCGQ12LM)", model: "lumi.sensor_ht.agl02", modelType: "Aqara WSDCGQ12LM", profileId:"0104",  endpointId:"01", inClusters:"0000,0003,0402,0405,0403,0001", outClusters:"0019", manufacturer:"LUMI"         //https://community.hubitat.com/t/aqara-temperature-and-humidity-sensor-t1-driver-issue/129771/3?u=kkossev
 
         fingerprint deviceJoinName: "Keen Temperature, Humidity & Pressure Sensor (RS-THP-MP-1.0)", model: "RS-THP-MP-1.0", modelType: "Keen RS-THP-MP-1.0", endpointId: 01, application: 0x0A, inClusters: "0000,0003,0001,0020", outClusters: "0000,0004,0003,0005,0019,0402,0405,0403,0020", manufacturer: "LUMI"
 
-        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003,0402,0405,0403,0001", outClusters:"0019", model:"lumi.sensor_ht.agl02", manufacturer:"LUMI" 
     }
 
     preferences {
@@ -378,9 +379,9 @@ void recoveryEventDeviceSpecific() {
 
 // BEGIN:getDefaultFunctions()
 private String getDriverVersion() {
-    comment = "Works with models WSDCGQ01LM & WSDCGQ11LM."
+    comment = "Works with models WSDCGQ01LM WSDCGQ11LM WSDCGQ12LM"
     if(comment != "") state.comment = comment
-    String version = driverVersionAndTimeStamp()    // was "v1.0.1.1123"
+    String version = driverVersionAndTimeStamp()
     logging("getDriverVersion() = ${version}", 100)
     sendEvent(name: "driver", value: version)
     updateDataValue('driver', version)
