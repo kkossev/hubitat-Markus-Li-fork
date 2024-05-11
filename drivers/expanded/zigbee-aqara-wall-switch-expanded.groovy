@@ -24,6 +24,7 @@
  *  ver. 2.0.3 2023-08-15 (kkossev) - added lumi.switch.b2laus01 Model WS-USC02 Aqara US Wall Switch w/o Neutral Double Rocker into the D1 series group.
  *  ver. 2.0.4 2023-08-29 (kkossev) - added lumi.switch.b1naus01 Model WS-USC03US Aqara Wall Switch (With Neutral, Single Rocker)
  *  ver. 2.0.5 2023-09-08 (kkossev) - new fingerprints; endpointId set to '01' for all models (possible reason for the 'F2' bug?)
+ *  ver. 2.0.6 2024-05-11 (kkossev) - added lumi.switch.l2aeu1 Model WS-EUK02 H1 EU Wall Switch (No Neutral, Double Rocker) into the D1 series group.
  *
  *                                    TODO: check healthStatus 
  *                                    TODO: //https://github.com/WooBooung/BooungThings/blob/fb0600b67b27c919cbae24953b4226294f4c1fd9/devicetypes/woobooung/integrated-zigbee-switch.src/integrated-zigbee-switch.groovy#L122
@@ -31,8 +32,8 @@
  *
  */
 
-def version() { "2.0.5" } 
-def timeStamp() {"2023/09/08 7:39 AM"}
+def version() { "2.0.6" } 
+def timeStamp() { "2024/05/11 7:05 PM" }
 
 // BEGIN:getDefaultImports()
 import groovy.json.JsonSlurper
@@ -96,8 +97,11 @@ metadata {
         fingerprint profileId: "0104", inClusters: "0000,0003,0004,0005,0001,0002,000A,0006,0010,0B04,000C", outClusters: "0019,000A", manufacturer: "LUMI", model: "lumi.relay.c2acn01", deviceJoinName: "Aqara Double Relay"
 
         /* Models WITHOUT Neutral wire */
-        fingerprint profileId: "0104", inClusters: "0000,0003,0001,0002,0019,000A", outClusters: "0000,000A,0019", manufacturer: "LUMI", model: "lumi.ctrl_neutral1", deviceJoinName: "Aqara Wall switch"
-        fingerprint profileId: "0104", inClusters: "0000,0003,0001,0002,0019,000A", outClusters: "0000,000A,0019", manufacturer: "LUMI", model: "lumi.ctrl_neutral2", deviceJoinName: "Aqara Wall switch"
+        fingerprint profileId:"0104", inClusters: "0000,0003,0001,0002,0019,000A", outClusters: "0000,000A,0019", manufacturer: "LUMI", model: "lumi.ctrl_neutral1", deviceJoinName: "Aqara Wall switch"
+        fingerprint profileId:"0104", inClusters: "0000,0003,0001,0002,0019,000A", outClusters: "0000,000A,0019", manufacturer: "LUMI", model: "lumi.ctrl_neutral2", deviceJoinName: "Aqara Wall switch"
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0002,0003,0004,0005,0006,0009", outClusters:"0019,000A", model:"lumi.switch.b2laus01", manufacturer:"LUMI", deviceJoinName: "Aqara WS-USC04 US Wall Switch w/o Neutral Double Rocker"                // added kkossev 09/06/2023 // https://community.hubitat.com/t/aqara-single-and-double-rocker-switch-no-neutral-ws-usc01-ws-usc02-driver/99124/5?u=kkossev
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003,0004,0005,0006", outClusters:"0019,000A", model:"lumi.switch.b2laus01", manufacturer:"LUMI", deviceJoinName: "Aqara WS-USC04 US Wall Switch w/o Neutral Double Rocker"                          // modified kkossev 08/15/2023
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0002,0003,0004,0005,0006,0009", outClusters:"0019,000A", model:"lumi.switch.l2aeu1", manufacturer:"LUMI", deviceJoinName: "Aqara WS-EUK02 H1 EU Wall Switch (No Neutral, Double Rocker)"             // added kkossev 05/11/2024 //https://community.hubitat.com/t/aqara-ws-euk02-no-neutral-dual-rocker/137693?u=kkossev
 
         /* D1 Models WITH Neutral wire */
         
@@ -110,8 +114,6 @@ metadata {
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003,0001,0002,0019,000A", outClusters:"0000,0019,000A", model:"lumi.switch.b2lacn02", manufacturer:"LUMI"                                                                                           // added kkossev 09/06/2023
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003,0004,0005,0006,0012,FCC0", outClusters:"0019,000A", model:"lumi.switch.l3acn3", manufacturer:"LUMI"
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0002,0003,0004,0005,0006,0009", outClusters:"0019,000A", model:"lumi.switch.l3acn3", manufacturer:"LUMI"                                                                                             // added kkossev 09/06/2023
-        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003,0004,0005,0006", outClusters:"0019,000A", model:"lumi.switch.b2laus01", manufacturer:"LUMI", deviceJoinName: "Aqara WS-USC04 US Wall Switch w/o Neutral Double Rocker"                          // modified kkossev 08/15/2023
-        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0002,0003,0004,0005,0006,0009", outClusters:"0019,000A", model:"lumi.switch.b2laus01", manufacturer:"LUMI", deviceJoinName: "Aqara WS-USC04 US Wall Switch w/o Neutral Double Rocker"                // added kkossev 09/06/2023 // https://community.hubitat.com/t/aqara-single-and-double-rocker-switch-no-neutral-ws-usc01-ws-usc02-driver/99124/5?u=kkossev
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003,0004,0005,0006", outClusters:"0019,000A", model:"lumi.switch.b2naus01", manufacturer:"LUMI", deviceJoinName: "Aqara WS-USC02 US Wall Switch w/ Neutral Double Rocker"                           // added kkossev 08/14/2023
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0002,0003,0004,0005,0006,0009,0012,0702,FCC0", outClusters:"0019,000A", model:"lumi.switch.b2naus01", manufacturer:"LUMI", deviceJoinName: "Aqara WS-USC03US Aqara Wall Switch w/ Neutral Single Rocker"  // added kkossev 09/06/2023
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003,0004,0005,0006", outClusters:"0019,000A", model:"lumi.switch.b1naus01", manufacturer:"LUMI", deviceJoinName: "Aqara WS-USC03US Aqara Wall Switch w/ Neutral Single Rocker"                      // added kkossev 08/29/2023
@@ -222,6 +224,11 @@ Integer refresh(boolean connectButtons=false) {
             break
         case "lumi.switch.b2laus01":
             sendEvent(name:"numberOfButtons", value: 4, isStateChange: false, descriptionText: "Aqara US Switch (WS-USC02) detected: set to 4 buttons (physical 2)")
+            physicalButtons = 2
+            buttonCombos = 2
+            break
+        case "lumi.switch.l2aeu1": // added kkossev 05/11/2024 H1 EU Wall Switch (No Neutral, Double Rocker)
+            sendEvent(name:"numberOfButtons", value: 4, isStateChange: false, descriptionText: "Aqara H1 EU Switch (WS-EUK02) detected: set to 4 buttons (physical 2)")
             physicalButtons = 2
             buttonCombos = 2
             break
@@ -336,6 +343,7 @@ String setCleanModelNameWithAcceptedModels(String newModelToSet=null) {
         "lumi.switch.b3nacn02",
         "lumi.relay.c2acn01",
         "lumi.switch.b2laus01",
+        "lumi.switch.l2aeu1",	
         "lumi.switch.b2naus01",
         "lumi.switch.b1naus01"
     ])
@@ -387,6 +395,7 @@ boolean isD1NonNeutralSwitch(String model=null) {
         case "lumi.switch.b2lacn02":
         case "lumi.switch.l3acn3":
         case "lumi.switch.b2laus01":
+        case "lumi.switch.l2aeu1":
             return true
             break
         default:
@@ -413,6 +422,7 @@ boolean isKnownModel(String model=null) {
         case "lumi.switch.l3acn3":
         case "lumi.relay.c2acn01":
         case "lumi.switch.b2laus01":
+        case "lumi.switch.l2aeu1":
         case "lumi.switch.b2naus01":
         case "lumi.switch.b1naus01":
             return true
