@@ -34,7 +34,7 @@
  */
 
 def version() { "2.1.0" } 
-def timeStamp() { "2024/06/20 10:07 PM" }
+def timeStamp() { "2024/06/20 10:11 PM" }
 
 // BEGIN:getDefaultImports()
 import groovy.json.JsonSlurper
@@ -533,7 +533,7 @@ ArrayList<String> parse(String description) {
     // BEGIN:getGenericZigbeeParseHeader(loglevel=0)
     //logging("PARSE START---------------------", 0)
     //logging("Parsing: '${description}'", 0)
-    log.trace "Parsing '${description}'"
+    //log.trace "Parsing '${description}'"
     ArrayList<String> cmd = []
     Map msgMap = null
     if(description.indexOf('encoding: 4C') >= 0) {
