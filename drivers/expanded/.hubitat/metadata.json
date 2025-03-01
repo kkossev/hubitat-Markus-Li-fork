@@ -5,6 +5,12 @@
       "id": 2611,
       "codeType": "driver",
       "version": 67
+    },
+    {
+      "filepath": "/c:/Work/hubitat-Markus-Li-fork/drivers/expanded/zigbee-generic-repeater-expanded.groovy",
+      "id": 2535,
+      "codeType": "driver",
+      "version": 9
     }
   ]
 }

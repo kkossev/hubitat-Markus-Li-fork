@@ -21,11 +21,12 @@
  *  ver. 2.0.0 2023-02-08 (kkossev) - driver name changed to 'Zigbee - Generic Repeater (with healthStatus)'; capability 'PresenceSensor' replaced w/ capability 'HealthCheck' (attribute 'healthStatus')
  *  ver. 2.0.1 2023-02-10 (kkossev) - More Ikea new models fingerprints
  *  ver. 2.0.2 2023-02-22 (kkossev) - added Aeotec Zi extender (ZGA001) WG001-Z01 AL001
+ *  ver. 2.0.3 2025-03-01 (kkossev) - added TS0001 _TZ3000_n0lphcok ; added TS0207 _TZ3000_m0vaazab _TZ3000_shopg9ss _TZ3000_wmlc9p9z _TZ3000_kxlmv9ag _TZ3000_wlquqiiz _TZ3000_nlsszmzl
  *
  */
 
-def version() { "2.0.2" }
-def timeStamp() {"2023/02/22 9:11 PM"}
+def version() { "2.0.3" }
+def timeStamp() {"2025/03/01 7:44 PM"}
 
 // BEGIN:getDefaultImports()
 import groovy.json.JsonSlurper
@@ -70,14 +71,19 @@ metadata {
         
         fingerprint model:"TRADFRI Signal Repeater", manufacturer:"IKEA of Sweden", profileId:"0104", endpointId:"01", inClusters:"0000,0003,0009,0B05,1000", outClusters:"0019,0020,1000", application:"21"
         fingerprint model:"TRADFRI Signal Repeater", manufacturer:"IKEA of Sweden", profileId:"0104", endpointId:"01", inClusters:"0000,0003,0009,0B05,1000,FC7C", outClusters:"0019,0020,1000", application:"20"
-        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,000A,0003", outClusters:"0019", model:"TS0207", manufacturer:"_TZ3000_5k5vh43t"                          // https://zigbee.blakadder.com/Tuya_TS0207.html
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,000A,0003", outClusters:"0019", model:"TS0207", manufacturer:"_TZ3000_5k5vh43t"                         // https://zigbee.blakadder.com/Tuya_TS0207.html
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,000A,0003", outClusters:"0019", model:"TS0207", manufacturer:"_TZ3000_gszjt2xx"
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,000A,0003", outClusters:"0019", model:"TS0207", manufacturer:"_TZ3000_misw04hq"
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,000A,0003", outClusters:"0019", model:"TS0207", manufacturer:"_TZ3000_nkkl7uzv"
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,000A,0003", outClusters:"0019", model:"TS0207", manufacturer:"_TZ3000_ufttklsz"
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,000A,0003", outClusters:"0019", model:"TS0207", manufacturer:"_TZ3000_nlsszmzl"                         // not tested
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,000A,0003", outClusters:"0019", model:"TS0207", manufacturer:"_TZ3000_wlquqiiz"
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,000A,0003", outClusters:"0019", model:"TS0207", manufacturer:"_TZ3000_kxlmv9ag"
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,000A,0003", outClusters:"0019", model:"TS0207", manufacturer:"_TZ3000_wmlc9p9z"
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,000A,0003", outClusters:"0019", model:"TS0207", manufacturer:"_TZ3000_shopg9ss"
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,000A,0003", outClusters:"0019", model:"TS0207", manufacturer:"_TZ3000_m0vaazab"
-        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003", outClusters:"0003,0019", model:"WG001-Z01", manufacturer:"AL001"                // ZAG001-C15 //https://community.hubitat.com/t/ikea-repeaters-not-working-any-more/110490/22?u=kkossev
-        
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003", outClusters:"0003,0019", model:"WG001-Z01", manufacturer:"AL001"                                 // ZAG001-C15 //https://community.hubitat.com/t/ikea-repeaters-not-working-any-more/110490/22?u=kkossev
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0006,0003,0004,0005,E001", outClusters:"000A", model:"TS0001", manufacturer:"_TZ3000_n0lphcok"          // https://community.hubitat.com/t/project-device-health-status-tuya-aqara-ikea-sonoff-lidl-thirdreality-and-others/111817/121?u=kkossev
     }
 
     preferences {
